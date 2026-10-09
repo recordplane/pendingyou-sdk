@@ -1,0 +1,48 @@
+{
+  "name": "@recordplane/pendingyou-sdk",
+  "version": "0.1.0",
+  "description": "The Pending You person API for apps that act as the person: device sign-in, DPoP, refresh, the change feed. Zero dependencies.",
+  "license": "Apache-2.0",
+  "homepage": "https://www.pendingyou.com/docs/api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/recordplane/pendingyou-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/recordplane/pendingyou-sdk/issues"
+  },
+  "keywords": [
+    "pendingyou",
+    "oauth",
+    "dpop",
+    "ai-agents",
+    "sdk"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "default": "./dist/node.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  }
+}

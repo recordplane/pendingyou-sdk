@@ -1,0 +1,11 @@
+{
+  "name": "pendingyou-example-change-feed",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "dependencies": {
+    "@recordplane/pendingyou-sdk": "^0.1.0"
+  }
+}
