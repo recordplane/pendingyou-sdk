@@ -247,6 +247,7 @@ export type Card = {
   }[]
   threadCount: number
   partial?: true
+  presentation?: Presentation
   url: string
   createdAt: string
   updatedAt: string
@@ -301,6 +302,88 @@ export type Attachment = {
   downloadExpiresAt?: string
 }
 
+export type Presentation = {
+  v: 1
+  layout: "choice" | "multi" | "approve" | "draft" | "review" | "todo" | "text" | "update" | "group" | "ask" | "permission" | "settled" | "fallback" | (string & {})
+  head: {
+    intent?: {
+      kind: "decide" | "approve" | "do" | "tell" | "heads_up" | (string & {})
+      label: Line
+    }
+    wait?: {
+      line: Line
+      tone: "you" | "deadline" | "quiet" | (string & {})
+    }
+    marks: ("files" | "high_stakes" | (string & {}))[]
+  }
+  above: {
+    kind: "asked_first" | "helper" | "note" | (string & {})
+    title?: Line
+    body: Line
+  }[]
+  options?: {
+    id: string
+    suggested?: Line
+  }[]
+  preselected?: string[]
+  below: Line[]
+  box: {
+    mode: "hidden" | "on_demand" | "open" | (string & {})
+    placeholder?: Line
+  }
+  actions: PresentationAction[]
+  settled?: Line
+  row: {
+    title: Line
+    meta: Line[]
+  }
+  fallback: {
+    line: Line
+    path: string
+  }
+}
+
+export type PresentationAction = {
+  id: "answer" | "answer.option" | "answer.approve" | "answer.decline" | "answer.done" | "answer.got_it" | "answer.allow" | "answer.deny" | "answer.send_words" | "answer.send_changes" | "answer.ask_keep_open" | "didnt_work" | "later" | "back" | "delegate" | "take_back" | "reply" | "details" | "undo" | "open_web" | (string & {})
+  label: Line
+  icon: "send" | "check" | "x" | "clock" | "forward" | "reply" | "info" | "undo" | "back" | "open" | (string & {})
+  place: "primary" | "secondary" | "link" | "overflow" | "dock" | (string & {})
+  style: "primary" | "secondary" | "quiet" | "ghost" | "danger" | (string & {})
+  confirm?: {
+    kind: "hold" | "tap" | (string & {})
+    prompt: Line
+    yes: Line
+    proof: "none" | "yes_key" | (string & {})
+  }
+  sends?: {
+    approved?: boolean
+    choiceIds?: string[]
+    theyDecide?: true
+  }
+  needs?: "choice" | "words" | (string & {})
+  disabledLabel?: Line
+}
+
+export type Line = {
+  key: string
+  args?: {
+    [key: string]: LineArg
+  }
+  text: string
+}
+
+export type LineArg = string | number | {
+  time: string
+  as: "clock" | "duration" | "ago" | "until" | "day" | (string & {})
+} | {
+  key: string
+}
+
+export type Toast = {
+  title: Line
+  detail?: Line
+}
+
 export type CardList = {
   cards: Card[]
   counts: {
@@ -323,12 +406,14 @@ export type AnswerResponse = {
   status: "answered"
   version: number
   undoUntil: string
+  toast?: Toast
 }
 
 export type CardBack = {
   id: string
   status: "pending"
   version: number
+  toast?: Toast
 }
 
 export type MessageResponse = {
@@ -336,6 +421,7 @@ export type MessageResponse = {
   messageId: string
   turn: "agent"
   version: number
+  toast?: Toast
 }
 
 export type LaterResponse = {
@@ -343,6 +429,7 @@ export type LaterResponse = {
   status: "snoozed"
   until: string
   version: number
+  toast?: Toast
 }
 
 export type DelegateResponse = {
@@ -351,6 +438,7 @@ export type DelegateResponse = {
   version: number
   hears?: "instant" | "every-15-min" | "hourly" | "while-working" | "by-hand" | (string & {})
   undoUntil: string
+  toast?: Toast
 }
 
 export type ChangeList = {

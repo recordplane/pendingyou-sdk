@@ -124,6 +124,8 @@ Every request and answer is typed, from the person API's OpenAPI document (`src/
 `CardList`, `AnswerRequest`, `Change`, `Assistant`, `Me` and the rest, exported from `@recordplane/pendingyou-sdk`.
 /v1 only adds, so the enums in what it sends are open: `Card['kind']` is `'choice' | 'multi' | … | (string & {})`. Give
 a value you don't know a way through (a `default:` in a `switch`) rather than assume the list is complete.
+`Presentation`, `PresentationAction`, `Line` and `Toast` type how Pending You draws a card and what an action's toast
+says; for now /v1 sends them to Pending You's own apps only, so read them as optional.
 
 ## This repository
 
