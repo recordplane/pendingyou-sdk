@@ -122,6 +122,8 @@ the store afterwards, whatever it answers: one Pending You couldn't reach ends b
 
 Every request and answer is typed, from the person API's OpenAPI document (`src/openapi.generated.ts`): `Card`,
 `CardList`, `AnswerRequest`, `Change`, `Assistant`, `Me` and the rest, exported from `@recordplane/pendingyou-sdk`.
+/v1 only adds, so the enums in what it sends are open: `Card['kind']` is `'choice' | 'multi' | … | (string & {})`. Give
+a value you don't know a way through (a `default:` in a `switch`) rather than assume the list is complete.
 
 ## This repository
 

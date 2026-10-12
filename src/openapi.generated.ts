@@ -17,8 +17,8 @@ export type Me = {
   }
   grant: {
     id: string
-    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "presence:desk")[]
-    reach: "machine" | "all"
+    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "presence:desk" | (string & {}))[]
+    reach: "machine" | "all" | (string & {})
     machine?: {
       id: string
       name: string
@@ -32,13 +32,13 @@ export type Me = {
 export type Card = {
   id: string
   version: number
-  status: "pending" | "delegated" | "answered" | "resolved" | "snoozed" | "expired" | "cancelled"
+  status: "pending" | "delegated" | "answered" | "resolved" | "snoozed" | "expired" | "cancelled" | (string & {})
   turn: "you" | "agent"
-  kind: "choice" | "multi" | "approve" | "text" | "review" | "action" | "fyi" | "group"
-  intent?: "decide" | "approve" | "do" | "tell" | "heads_up"
+  kind: "choice" | "multi" | "approve" | "text" | "review" | "action" | "fyi" | "group" | (string & {})
+  intent?: "decide" | "approve" | "do" | "tell" | "heads_up" | (string & {})
   title: string
   summary: string
-  urgency: "now" | "today" | "whenever"
+  urgency: "now" | "today" | "whenever" | (string & {})
   blocking: boolean
   fallback?: {
     text: string
@@ -62,9 +62,9 @@ export type Card = {
   approve?: {
     action: string
     command?: string
-    risk: "low" | "medium" | "high"
+    risk: "low" | "medium" | "high" | (string & {})
     reversible: boolean
-    because?: "spends" | "irreversible" | "public"
+    because?: "spends" | "irreversible" | "public" | (string & {})
   }
   text?: {
     placeholder: string
@@ -83,7 +83,7 @@ export type Card = {
   }
   questions?: {
     id: string
-    kind: "choice" | "multi" | "approve" | "text"
+    kind: "choice" | "multi" | "approve" | "text" | (string & {})
     title: string
     detail?: string
     options?: {
@@ -104,9 +104,9 @@ export type Card = {
     approve?: {
       action: string
       command?: string
-      risk: "low" | "medium" | "high"
+      risk: "low" | "medium" | "high" | (string & {})
       reversible: boolean
-      because?: "spends" | "irreversible" | "public"
+      because?: "spends" | "irreversible" | "public" | (string & {})
     }
     highStakes?: boolean
     text?: {
@@ -116,14 +116,14 @@ export type Card = {
     }
   }[]
   about?: {
-    kind: "email" | "pr" | "booking" | "document" | "other"
+    kind: "email" | "pr" | "booking" | "document" | "other" | (string & {})
     title: string
     ref?: string
   }
   threadId?: string
   follows?: string
   highStakes: boolean
-  actions: ("answer" | "undo" | "reply" | "later" | "back" | "delegate" | "take_back")[]
+  actions: ("answer" | "undo" | "reply" | "later" | "back" | "delegate" | "take_back" | (string & {}))[]
   area: {
     id: string
     name: string
@@ -132,7 +132,7 @@ export type Card = {
     assistant: {
       id: string
       name: string
-      app: "claude-code" | "codex" | "cursor" | "gemini-cli" | "opencode" | "pi" | "grok" | "muse" | "chatgpt" | "claude" | "dots" | "other" | "webhook"
+      app: "claude-code" | "codex" | "cursor" | "gemini-cli" | "opencode" | "pi" | "grok" | "muse" | "chatgpt" | "claude" | "dots" | "other" | "webhook" | (string & {})
       appName: string
     }
     agent?: {
@@ -150,9 +150,9 @@ export type Card = {
     }
   }
   askedFirst?: {
-    where: "terminal" | "chat"
+    where: "terminal" | "chat" | (string & {})
     at: string
-    why?: "quiet" | "away"
+    why?: "quiet" | "away" | (string & {})
   }
   answer?: Answer
   undoUntil?: string
@@ -162,13 +162,13 @@ export type Card = {
       assistantId: string
       agentId?: string
     }
-    mode: "freely" | "loop"
-    state: "working" | "suggested" | "answered" | "returned" | "taken_back"
+    mode: "freely" | "loop" | (string & {})
+    state: "working" | "suggested" | "answered" | "returned" | "taken_back" | (string & {})
     at: string
   }
   ask?: {
     id: string
-    from: "helper" | "asker"
+    from: "helper" | "asker" | (string & {})
     name: string
     title: string
     summary?: string
@@ -195,7 +195,7 @@ export type Card = {
   context?: {
     background: string
     trace: {
-      state: "done" | "paused" | "warn" | "failed"
+      state: "done" | "paused" | "warn" | "failed" | (string & {})
       text: string
     }[]
     filesTouched: string[]
@@ -206,7 +206,7 @@ export type Card = {
     }[]
   }
   artifacts?: {
-    kind: "image" | "diff" | "url" | "file" | "draft" | "code"
+    kind: "image" | "diff" | "url" | "file" | "draft" | "code" | (string & {})
     title: string
     ref: string
     attachmentId?: string
@@ -214,7 +214,7 @@ export type Card = {
     upload?: boolean
     lines?: string[]
     caption?: string
-    lang?: "ts" | "json" | "shell" | "sql" | "yaml" | "toml" | "css" | "markdown" | "text"
+    lang?: "ts" | "json" | "shell" | "sql" | "yaml" | "toml" | "css" | "markdown" | "text" | (string & {})
     startLine?: number
   } | {
     kind: "path"
@@ -230,12 +230,12 @@ export type Card = {
   hasFiles?: true
   thread?: {
     id: string
-    author: "you" | "agent" | "pendingyou" | "helper" | "teammate"
+    author: "you" | "agent" | "pendingyou" | "helper" | "teammate" | (string & {})
     teammate?: {
       name: string
     }
     body: string
-    via?: "voice" | "text"
+    via?: "voice" | "text" | (string & {})
     audioSeconds?: number
     attachmentIds?: string[]
     app?: {
@@ -260,7 +260,7 @@ export type Answer = {
       text?: string
       note?: {
         text: string
-        via: "voice" | "text"
+        via: "voice" | "text" | (string & {})
         audioSeconds?: number
       }
       theyDecide?: boolean
@@ -271,18 +271,18 @@ export type Answer = {
   text?: string
   note?: {
     text: string
-    via: "voice" | "text"
+    via: "voice" | "text" | (string & {})
     audioSeconds?: number
   }
   theyDecide?: boolean
   failedStep?: number
-  by?: "you" | "go-between" | "helper" | "teammate"
+  by?: "you" | "go-between" | "helper" | "teammate" | (string & {})
   helper?: {
     name: string
     why: string
     note?: string
   }
-  where?: "app" | "conversation"
+  where?: "app" | "conversation" | (string & {})
   app?: {
     id: string
     name: string
@@ -293,7 +293,7 @@ export type Answer = {
 
 export type Attachment = {
   id: string
-  place: "card" | "message" | "answer"
+  place: "card" | "message" | "answer" | (string & {})
   title: string
   contentType?: string
   bytes?: number
@@ -349,7 +349,7 @@ export type DelegateResponse = {
   id: string
   status: "delegated"
   version: number
-  hears?: "instant" | "every-15-min" | "hourly" | "while-working" | "by-hand"
+  hears?: "instant" | "every-15-min" | "hourly" | "while-working" | "by-hand" | (string & {})
   undoUntil: string
 }
 
@@ -360,7 +360,7 @@ export type ChangeList = {
 }
 
 export type Change = {
-  type: "card.created" | "card.answered" | "card.changed" | "card.closed"
+  type: "card.created" | "card.answered" | "card.changed" | "card.closed" | (string & {})
   cardId: string
   at: string
 }
@@ -371,19 +371,19 @@ export type AssistantList = {
 
 export type Assistant = {
   id: string
-  app: "claude-code" | "codex" | "cursor" | "gemini-cli" | "opencode" | "pi" | "grok" | "muse" | "chatgpt" | "claude" | "dots" | "other" | "webhook"
+  app: "claude-code" | "codex" | "cursor" | "gemini-cli" | "opencode" | "pi" | "grok" | "muse" | "chatgpt" | "claude" | "dots" | "other" | "webhook" | (string & {})
   appName: string
   name: string
   machine?: {
     id: string
     name: string
   }
-  hears?: "instant" | "every-15-min" | "hourly" | "while-working" | "by-hand"
+  hears?: "instant" | "every-15-min" | "hourly" | "while-working" | "by-hand" | (string & {})
   agents: {
     id: string
     name: string
     about?: string
-    state: "live" | "recent" | "quiet"
+    state: "live" | "recent" | "quiet" | (string & {})
     liveAt?: string
     closedAt?: string
     openCards: number
@@ -405,17 +405,17 @@ export type Problem = {
   type: string
   title: string
   status: number
-  code: "invalid" | "app_not_available" | "high_stakes" | "area_change" | "not_your_answer" | "forbidden" | "not_found" | "method_not_allowed" | "version_conflict" | "not_waiting" | "hold_over" | "delegated" | "conflict" | "idempotency_in_progress" | "idempotency_mismatch" | "rate_limited" | "server_error" | "not_available" | "unavailable"
+  code: "invalid" | "app_not_available" | "high_stakes" | "area_change" | "not_your_answer" | "forbidden" | "not_found" | "method_not_allowed" | "version_conflict" | "not_waiting" | "hold_over" | "delegated" | "conflict" | "idempotency_in_progress" | "idempotency_mismatch" | "rate_limited" | "server_error" | "not_available" | "unavailable" | (string & {})
   detail: string
   requestId?: string
   fields?: string[]
   reason?: string
-  why?: "disabled" | "unverified" | "not_registered" | "off"
+  why?: "disabled" | "unverified" | "not_registered" | "off" | (string & {})
   url?: string
   currentVersion?: number
-  cardStatus?: "pending" | "delegated" | "answered" | "resolved" | "snoozed" | "expired" | "cancelled"
+  cardStatus?: "pending" | "delegated" | "answered" | "resolved" | "snoozed" | "expired" | "cancelled" | (string & {})
   retryAfterSeconds?: number
-  scope?: "read" | "write" | "answers" | "wait" | "workspace"
+  scope?: "read" | "write" | "answers" | "wait" | "workspace" | (string & {})
 }
 
 export type ListCardsQuery = {
