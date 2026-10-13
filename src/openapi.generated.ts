@@ -17,7 +17,7 @@ export type Me = {
   }
   grant: {
     id: string
-    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "presence:desk" | "cards:high_stakes" | "cards:manage" | (string & {}))[]
+    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "presence:desk" | "cards:high_stakes" | "cards:manage" | "account:manage" | (string & {}))[]
     reach: "machine" | "all" | (string & {})
     machine?: {
       id: string
@@ -519,6 +519,12 @@ export type YesKeyResponse = {
   registeredAt: string
 }
 
+export type WebHandoff = {
+  url: string
+  expiresAt: string
+  path: string
+}
+
 export type ChangeList = {
   changes: Change[]
   cursor: string
@@ -683,6 +689,10 @@ export type HoldRequest = {
 
 export type YesKeyRequest = {
   proof: string
+}
+
+export type WebHandoffRequest = {
+  path: string
 }
 
 export type ChangesQuery = {
