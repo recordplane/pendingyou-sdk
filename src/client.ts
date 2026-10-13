@@ -33,6 +33,7 @@ import type {
   MessageRequest,
   MessageResponse,
   Problem,
+  Snapshot,
 } from './openapi.generated.ts'
 import type { Credentials, Store } from './store.ts'
 
@@ -68,6 +69,11 @@ export interface RequestOptions {
 export interface Client {
   /** Who and what this sign-in is. Any scope. */
   me(options?: { signal?: AbortSignal }): Promise<Me>
+  /**
+   * The queue in one read (cards:read): each list's first cards, the counts, and the areas and groups they're filed in.
+   * Its ETag goes back with the next read, and a 304 is the snapshot it had.
+   */
+  snapshot(options?: { signal?: AbortSignal }): Promise<Snapshot>
   cards: {
     /** The cards in reach, one list at a time (cards:read). */
     list(query?: ListCardsQuery, options?: { signal?: AbortSignal }): Promise<CardList>
@@ -313,6 +319,7 @@ export function createClient(options: ClientOptions): Client {
 
   const client: Client = {
     me: (opts) => request<Me>('GET', '/v1/me', opts),
+    snapshot: (opts) => request<Snapshot>('GET', '/v1/snapshot', opts),
     cards: {
       list: (query, opts) =>
         request<CardList>('GET', '/v1/cards', {

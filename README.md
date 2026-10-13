@@ -102,7 +102,12 @@ for await (const batch of pendingYou.changes({ signal })) {
 The client signs every request (DPoP, with the nonce Pending You asks for), refreshes tokens once however many calls
 need it (across processes sharing a `fileStore` too), sends ETags back, and makes an `Idempotency-Key` for every
 answer, kept if it has to send the answer again. High-stakes cards come back from `answer` as an `ApiError` with code
-`high_stakes`: send the person to `card.url`.
+`high_stakes`: send the person to `card.url`. `answer` with `handled: 'self'` says the person will do it themselves
+(I'll handle it), and `handled: 'leave'` that they won't do a to-do (Skip).
+
+`pendingYou.snapshot()` reads the whole queue at once: each list's first cards (`pending`, `later`, `delegated`,
+`done`), their `counts`, and the `areas` and `groups` the cards are filed in. Read it on start and when the change feed
+says something changed; while nothing has, its ETag makes the read a 304.
 
 `fileStore(path)` keeps the sign-in at `path`, readable only by you (0600), written whole, and locked while it's
 written or refreshed. `memoryStore()` keeps it in memory.
@@ -126,6 +131,8 @@ Every request and answer is typed, from the person API's OpenAPI document (`src/
 a value you don't know a way through (a `default:` in a `switch`) rather than assume the list is complete.
 `Presentation`, `PresentationAction`, `Line` and `Toast` type how Pending You draws a card and what an action's toast
 says; for now /v1 sends them to Pending You's own apps only, so read them as optional.
+`ClientConfig` types GET /v1/client's answer, which Pending You's own apps read (with the `Pending-You-Client` header)
+to learn whether their version must update; your app doesn't need it.
 
 ## This repository
 
