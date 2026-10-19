@@ -128,7 +128,9 @@ the store afterwards, whatever it answers: one Pending You couldn't reach ends b
 Every request and answer is typed, from the person API's OpenAPI document (`src/openapi.generated.ts`): `Card`,
 `CardList`, `AnswerRequest`, `Change`, `Assistant`, `Me` and the rest, exported from `@recordplane/pendingyou-sdk`.
 /v1 only adds, so the enums in what it sends are open: `Card['kind']` is `'choice' | 'multi' | … | (string & {})`. Give
-a value you don't know a way through (a `default:` in a `switch`) rather than assume the list is complete.
+a value you don't know a way through (a `default:` in a `switch`) rather than assume the list is complete. A doc's
+`Block` and `Run` are open the same way: each ends in `{ t: string }`, a kind of block or run your version doesn't
+know, so read past it (the doc's `plain` has all its words).
 `Presentation`, `PresentationAction`, `Line` and `Toast` type how Pending You draws a card and what an action's toast
 says; for now /v1 sends them to Pending You's own apps only, so read them as optional.
 `ClientConfig` types GET /v1/client's answer, which Pending You's own apps read (with the `Pending-You-Client` header)

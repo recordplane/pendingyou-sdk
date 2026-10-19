@@ -41,6 +41,7 @@ export type Card = {
   intent?: "decide" | "approve" | "do" | "tell" | "heads_up" | (string & {})
   title: string
   summary: string
+  summaryRuns?: Run[]
   urgency: "now" | "today" | "whenever" | (string & {})
   blocking: boolean
   fallback?: {
@@ -208,6 +209,7 @@ export type Card = {
       url: string
     }[]
   }
+  backgroundDoc?: Doc
   artifacts?: {
     kind: "image" | "diff" | "url" | "file" | "draft" | "code" | (string & {})
     title: string
@@ -246,6 +248,7 @@ export type Card = {
       name: string
       machine?: string
     }
+    doc?: Doc
     createdAt: string
   }[]
   threadCount: number
@@ -321,6 +324,87 @@ export type NewReply = {
     text: string
     at: string
   }
+}
+
+export type Doc = {
+  v: 1
+  blocks: Block[]
+  plain?: string
+}
+
+export type Block = {
+  t: "p"
+  runs: Run[]
+} | {
+  t: "heading"
+  runs: Run[]
+} | {
+  t: "list"
+  ordered: boolean
+  start?: number
+  items: {
+    blocks: Block[]
+    done?: boolean
+  }[]
+} | {
+  t: "quote"
+  blocks: Block[]
+} | {
+  t: "code"
+  lang?: string
+  lines: string[]
+} | {
+  t: "table"
+  head: Run[][]
+  rows: Run[][][]
+  align: ("left" | "right" | "center" | (string & {}))[]
+  compact: boolean
+  caption?: string
+  more?: {
+    rows?: number
+    columns?: number
+  }
+} | {
+  t: "rule"
+} | {
+  t: "cut"
+} | {
+  /** A kind this version doesn’t know: /v1 adds kinds, so read past it (a doc has its `plain`). */
+  t: string
+}
+
+export type Run = {
+  t: "text"
+  text: string
+  b?: true
+  i?: true
+  s?: true
+} | {
+  t: "code"
+  text: string
+} | {
+  t: "br"
+} | {
+  t: "address"
+  text: string
+} | {
+  t: "link"
+  href: string
+  words: string
+  site: string
+  asWritten?: true
+  own?: {
+    kind: "card" | "page" | (string & {})
+    id?: string
+    path: string
+    name?: string
+  }
+  b?: true
+  i?: true
+  s?: true
+} | {
+  /** A kind this version doesn’t know: /v1 adds kinds, so read past it (a doc has its `plain`). */
+  t: string
 }
 
 export type Presentation = {
