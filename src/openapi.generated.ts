@@ -37,7 +37,7 @@ export type Card = {
   version: number
   status: "pending" | "delegated" | "answered" | "resolved" | "snoozed" | "expired" | "cancelled" | (string & {})
   turn: "you" | "agent"
-  kind: "choice" | "multi" | "approve" | "text" | "review" | "action" | "fyi" | "group" | (string & {})
+  kind: "choice" | "multi" | "approve" | "text" | "review" | "action" | "fyi" | "group" | "answer" | (string & {})
   intent?: "decide" | "approve" | "do" | "tell" | "heads_up" | (string & {})
   title: string
   summary: string
@@ -231,6 +231,15 @@ export type Card = {
     note?: string
     fetch?: string
   }[]
+  asked?: {
+    text: string
+    at?: string
+  }
+  body?: Doc
+  asOf?: string
+  dataSource?: string
+  dataSourceRuns?: Run[]
+  inChat?: boolean
   attachments?: Attachment[]
   hasFiles?: true
   thread?: {
@@ -409,7 +418,7 @@ export type Run = {
 
 export type Presentation = {
   v: 1
-  layout: "choice" | "multi" | "approve" | "draft" | "review" | "todo" | "text" | "update" | "group" | "ask" | "permission" | "settled" | "fallback" | (string & {})
+  layout: "choice" | "multi" | "approve" | "draft" | "review" | "todo" | "text" | "update" | "group" | "ask" | "permission" | "answer" | "settled" | "fallback" | (string & {})
   head: {
     intent?: {
       kind: "decide" | "approve" | "do" | "tell" | "heads_up" | (string & {})
