@@ -169,6 +169,8 @@ export type Card = {
     mode: "freely" | "loop" | (string & {})
     state: "working" | "suggested" | "answered" | "returned" | "taken_back" | (string & {})
     at: string
+    pickedUpAt?: string
+    returnAt?: string
   }
   ask?: {
     id: string
@@ -447,6 +449,40 @@ export type Presentation = {
   }
   actions: PresentationAction[]
   settled?: Line
+  route?: {
+    first: {
+      name: string
+      who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | (string & {})
+    }
+    hidden: boolean
+    current: {
+      name: string
+      who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | (string & {})
+    }
+    label: Line
+    state?: Line
+    tone: "quiet" | "stalled" | "you" | (string & {})
+    steps?: {
+      at?: string
+      line: Line
+      detail?: Line
+      quote?: string
+      who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | "you" | (string & {})
+      name?: string
+      source?: "claude-code" | "codex" | "cursor" | "gemini-cli" | "opencode" | "pi" | "grok" | "muse" | "chatgpt" | "claude" | "dots" | "other" | "webhook" | "teammate" | (string & {})
+      when: "past" | "now" | "next" | (string & {})
+      rounds?: {
+        at?: string
+        line: Line
+        detail?: Line
+        quote?: string
+        who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | "you" | (string & {})
+        name?: string
+        source?: "claude-code" | "codex" | "cursor" | "gemini-cli" | "opencode" | "pi" | "grok" | "muse" | "chatgpt" | "claude" | "dots" | "other" | "webhook" | "teammate" | (string & {})
+        when: "past" | "now" | "next" | (string & {})
+      }[]
+    }[]
+  }
   row: {
     title: Line
     meta: Line[]
