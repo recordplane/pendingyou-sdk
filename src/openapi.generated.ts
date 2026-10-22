@@ -78,6 +78,7 @@ export type Card = {
   action?: {
     where?: string
     steps: (string | {
+      id?: string
       text: string
       command?: string
     })[]
@@ -85,6 +86,7 @@ export type Card = {
     command?: string
     verify?: string
   }
+  progress?: StepProgress
   questions?: {
     id: string
     kind: "choice" | "multi" | "approve" | "text" | (string & {})
@@ -127,7 +129,7 @@ export type Card = {
   threadId?: string
   follows?: string
   highStakes: boolean
-  actions: ("answer" | "undo" | "reply" | "later" | "back" | "delegate" | "take_back" | (string & {}))[]
+  actions: ("answer" | "undo" | "reply" | "later" | "back" | "delegate" | "take_back" | "tick" | (string & {}))[]
   area: {
     id: string
     name: string
@@ -337,6 +339,12 @@ export type NewReply = {
   }
 }
 
+export type StepProgress = {
+  rev: number
+  done: string[]
+  unticked?: string[]
+}
+
 export type Doc = {
   v: 1
   blocks: Block[]
@@ -442,6 +450,7 @@ export type Presentation = {
     suggested?: Line
   }[]
   preselected?: string[]
+  steps?: PresentationSteps
   below: Line[]
   box: {
     mode: "hidden" | "on_demand" | "open" | (string & {})
@@ -513,6 +522,23 @@ export type PresentationAction = {
   }
   needs?: "choice" | "words" | (string & {})
   disabledLabel?: Line
+}
+
+export type PresentationSteps = {
+  count?: Line
+  fold?: {
+    through: number
+    line: Line
+    show: Line
+    hide: Line
+    showLabel: Line
+    hideLabel: Line
+  }
+  items: {
+    id: string
+    n: number
+    state: "done" | "next" | "todo" | "failed" | (string & {})
+  }[]
 }
 
 export type Line = {
@@ -646,6 +672,11 @@ export type HoldResponse = {
 
 export type YesKeyResponse = {
   registeredAt: string
+}
+
+export type StepsResponse = {
+  id: string
+  progress: StepProgress
 }
 
 export type WebHandoff = {
@@ -818,6 +849,12 @@ export type HoldRequest = {
 
 export type YesKeyRequest = {
   proof: string
+}
+
+export type StepsRequest = {
+  step: string
+  done: boolean
+  through?: boolean
 }
 
 export type WebHandoffRequest = {
