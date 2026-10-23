@@ -343,6 +343,31 @@ export type StepProgress = {
   rev: number
   done: string[]
   unticked?: string[]
+  agent?: {
+    id: string
+    at: string
+    how: "saw" | "told" | (string & {})
+  }[]
+  failed?: {
+    id: string
+    n: number
+    by: "you" | "agent" | (string & {})
+    at: string
+  }
+  change?: {
+    at: string
+    added: string[]
+    changed: string[]
+    removed: number
+    before?: string
+    ticksOff?: string[]
+    failed?: {
+      id?: string
+      n: number
+      by: "you" | "agent" | (string & {})
+      at: string
+    }
+  }
 }
 
 export type Doc = {
@@ -529,15 +554,32 @@ export type PresentationSteps = {
   fold?: {
     through: number
     line: Line
+    agent?: Line
     show: Line
     hide: Line
     showLabel: Line
     hideLabel: Line
   }
+  change?: {
+    before: string
+    at: string
+    failed?: Line
+    head?: Line
+    note?: Line
+    removed?: Line
+  }
   items: {
     id: string
     n: number
     state: "done" | "next" | "todo" | "failed" | (string & {})
+    mark?: "new" | "changed" | (string & {})
+    by?: {
+      how: "saw" | "told" | (string & {})
+      at: string
+      line: Line
+      label: Line
+    }
+    changedAfter?: Line
   }[]
 }
 
