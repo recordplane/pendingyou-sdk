@@ -173,6 +173,11 @@ export type Card = {
     at: string
     pickedUpAt?: string
     returnAt?: string
+    working?: {
+      doing: string
+      since: string
+      until: string
+    }
   }
   ask?: {
     id: string
