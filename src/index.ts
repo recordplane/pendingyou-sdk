@@ -23,5 +23,6 @@ export {
 export { generateKey, importKey, type PrivateJwk, thumbprint } from './dpop.ts'
 export { ApiError, SignedOutError, SignInError } from './errors.ts'
 export * from './openapi.generated.ts'
+export { type FollowShowsOptions, REPEAT_MS, type ShowsOptions } from './shows.ts'
 export { type SignOutOptions, signOut } from './signout.ts'
 export { type Credentials, memoryStore, type Store } from './store.ts'

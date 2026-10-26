@@ -17,7 +17,7 @@ export type Me = {
   }
   grant: {
     id: string
-    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "presence:desk" | "cards:high_stakes" | "cards:manage" | "account:manage" | (string & {}))[]
+    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "assistants:show" | "presence:desk" | "cards:high_stakes" | "cards:manage" | "account:manage" | (string & {}))[]
     reach: "machine" | "all" | (string & {})
     machine?: {
       id: string
@@ -772,19 +772,54 @@ export type Assistant = {
       areaId?: string
       liveAt: string
       terminal?: {
-        app: "herdr"
+        app: "herdr" | "tmux" | (string & {})
         paneId: string
         server?: string
       }
+      show?: {
+        app: "herdr" | "tmux" | (string & {})
+        where: string
+      }
     }[]
   }[]
+}
+
+export type ShowList = {
+  shows: Show[]
+}
+
+export type Show = {
+  id: string
+  card: {
+    id: string
+  }
+  agent: {
+    id: string
+    name: string
+    app: "claude-code" | "codex" | "cursor" | "gemini-cli" | "opencode" | "pi" | "grok" | "muse" | "chatgpt" | "claude" | "dots" | "other" | "webhook" | (string & {})
+  }
+  places: ShowPlace[]
+  expiresAt: string
+}
+
+export type ShowPlace = {
+  app: "herdr" | "tmux" | (string & {})
+  paneId: string
+  server?: string
+  sessionId: string
+}
+
+export type ShowAnswer = {
+  id: string
+  result: "shown" | "not_found" | (string & {})
+  answeredAt: string
 }
 
 export type Problem = {
   type: string
   title: string
   status: number
-  code: "invalid" | "app_not_available" | "high_stakes" | "yes_required" | "area_change" | "not_your_answer" | "forbidden" | "not_found" | "method_not_allowed" | "version_conflict" | "not_waiting" | "hold_over" | "delegated" | "conflict" | "idempotency_in_progress" | "idempotency_mismatch" | "rate_limited" | "server_error" | "not_available" | "client_outdated" | "unavailable" | (string & {})
+  code: "invalid" | "app_not_available" | "high_stakes" | "yes_required" | "area_change" | "not_your_answer" | "forbidden" | "no_machine" | "not_found" | "method_not_allowed" | "version_conflict" | "not_waiting" | "hold_over" | "delegated" | "conflict" | "already_answered" | "expired" | "idempotency_in_progress" | "idempotency_mismatch" | "rate_limited" | "server_error" | "not_available" | "client_outdated" | "unavailable" | (string & {})
   detail: string
   requestId?: string
   fields?: string[]
@@ -912,6 +947,15 @@ export type ChangesQuery = {
   after?: string
   wait?: number
   limit?: number
+}
+
+export type ShowsQuery = {
+  places: ("herdr" | "tmux")[]
+  wait?: number
+}
+
+export type ShowAnswerRequest = {
+  result: "shown" | "not_found"
 }
 
 export type PresenceRequest = {

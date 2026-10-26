@@ -11,5 +11,8 @@ as they are.
   webhook would.
 - [A terminal queue, the way Pending You for Herdr works](herdr-queue/): the first real app on the API, its calls in a
   plain terminal: the queue, answers by key, Later, where each agent is running, and keeping the phone quiet.
+- [Show in tmux](show-in-tmux/): when the person presses Show on a card, bring the agent that asked to the front in
+  tmux on this computer. The whole of an app's side of Show me, in about 80 lines; it signs in on its own, for
+  `assistants:show` alone.
 
 The reference for everything here: <https://www.pendingyou.com/docs/api>.

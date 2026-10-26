@@ -27,6 +27,8 @@ Whole apps you can run, in [examples/](https://github.com/recordplane/pendingyou
   happens, passed on to your own server.
 - [herdr-queue](https://github.com/recordplane/pendingyou-sdk/tree/main/examples/herdr-queue): a terminal queue making
   the calls Pending You for Herdr makes.
+- [show-in-tmux](https://github.com/recordplane/pendingyou-sdk/tree/main/examples/show-in-tmux): when the person
+  presses Show on a card, bring the agent that asked to the front in tmux.
 
 ## Sign in (device code)
 
@@ -108,6 +110,26 @@ answer, kept if it has to send the answer again. High-stakes cards come back fro
 `pendingYou.snapshot()` reads the whole queue at once: each list's first cards (`pending`, `later`, `delegated`,
 `done`), their `counts`, and the `areas` and `groups` the cards are filed in. Read it on start and when the change feed
 says something changed; while nothing has, its ETag makes the read a 304.
+
+An app that brings windows to the front on its computer (a terminal's panes: `herdr` or `tmux`) can follow the person's
+presses of Show on a card, with `assistants:show`, signed in on that computer:
+
+```ts
+await pendingYou.followShows({
+  places: ['herdr'],
+  mine: (place) => place.server === myServer,
+  find: (show) => myPanes().find((pane) => pane.id === show.places[0]?.paneId && isAgentsPane(pane, show)),
+  focus: (pane) => focusPane(pane),
+  signal,
+})
+```
+
+`find` looks for the agent's window in your own list and returns your own record of it; `focus` gets only that, so a
+show only ever brings forward a window you already know. It answers `shown`, or `not_found` when nothing was found,
+and leaves a show with no place of yours to the app whose it is. Never type into a window, run anything or open a link
+for a show. `pendingYou.shows({ places })` gives the show requests alone, each once, and `answerShow(id, result)`
+answers one. The [show-in-tmux](https://github.com/recordplane/pendingyou-sdk/tree/main/examples/show-in-tmux) example
+does all of it for tmux.
 
 `fileStore(path)` keeps the sign-in at `path`, readable only by you (0600), written whole, and locked while it's
 written or refreshed. `memoryStore()` keeps it in memory.

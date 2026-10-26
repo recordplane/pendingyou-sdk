@@ -6,6 +6,6 @@
     "node": ">=22.18"
   },
   "dependencies": {
-    "@recordplane/pendingyou-sdk": "^0.3.3"
+    "@recordplane/pendingyou-sdk": "^0.4.0"
   }
 }

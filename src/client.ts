@@ -8,7 +8,8 @@
 // - ETags: a read sends back the ETag it holds and takes 304 as the answer it had;
 // - Idempotency-Key: one made for every answer (and every other change to a card), kept for its retry, so a request
 //   sent again after a dropped connection never answers twice;
-// - `changes()`, the change feed as an async iterator, with backoff and a resync every 10 minutes.
+// - `changes()`, the change feed as an async iterator, with backoff and a resync every 10 minutes;
+// - Show me's show requests (`shows()`, `answerShow()`, `followShows()`): shows.ts.
 // It never logs, and never puts a token, proof or a card's words in an error.
 import { type ChangeBatch, type ChangesOptions, changeFeed } from './changes.ts'
 import { type DpopKey, importKey, proof, wantsNonce } from './dpop.ts'
@@ -33,8 +34,13 @@ import type {
   MessageRequest,
   MessageResponse,
   Problem,
+  Show,
+  ShowAnswer,
+  ShowList,
+  ShowsQuery,
   Snapshot,
 } from './openapi.generated.ts'
+import { type FollowShowsOptions, followShowsWith, type ShowsOptions, showFeed } from './shows.ts'
 import type { Credentials, Store } from './store.ts'
 
 /** A token this close to running out is refreshed first. */
@@ -120,12 +126,35 @@ export interface Client {
   changesPage(query?: ChangesQuery, options?: { signal?: AbortSignal }): Promise<ChangeList>
   /** The change feed, followed (cards:read): see changes.ts. */
   changes(options?: ChangesOptions): AsyncIterableIterator<ChangeBatch>
+  /**
+   * One look for show requests (assistants:show): the ones open for this sign-in's computer, of these kinds of place,
+   * waiting up to `wait` seconds for the first. It says the app is listening, for the next minute.
+   */
+  showsPage(query: ShowsQuery, options?: { signal?: AbortSignal }): Promise<ShowList>
+  /** Show requests as they come, each once (assistants:show): see shows.ts. */
+  shows(options: ShowsOptions): AsyncIterableIterator<Show>
+  /**
+   * Answers a show request (assistants:show): `shown` once its place is at the front, `not_found` when the app couldn't
+   * confirm it and moved nothing. The first answer wins. An Idempotency-Key is made unless given.
+   */
+  answerShow(
+    id: string,
+    result: 'shown' | 'not_found',
+    options?: { idempotencyKey?: string },
+  ): Promise<ShowAnswer>
+  /**
+   * Follows show requests and answers each (assistants:show), bringing forward only a window `find` found in the
+   * app's own list: see shows.ts. Ends when `signal` aborts; a sign-in that ended or a refusal ends it with an error.
+   */
+  followShows<Window>(options: FollowShowsOptions<Window>): Promise<void>
   /** Any /v1 request, with DPoP, refresh, ETags and an Idempotency-Key as the methods have them. */
   request<T>(method: 'GET' | 'POST', path: string, options?: RequestOptions): Promise<T>
 }
 
 const path = (id: string, action?: string) =>
   `/v1/cards/${encodeURIComponent(id)}${action ? `/${action}` : ''}`
+
+const showPath = (id: string) => `/v1/shows/${encodeURIComponent(id)}`
 
 /** The query string a GET sends: a filter repeated for each of its values. */
 export function queryString(query: RequestOptions['query']): string {
@@ -372,6 +401,28 @@ export function createClient(options: ClientOptions): Client {
       changeFeed(
         (query, signal) => client.changesPage(query, signal ? { signal } : {}),
         { now: http.now, sleep },
+        opts,
+      ),
+    showsPage: (query, opts) =>
+      request<ShowList>('GET', '/v1/shows', {
+        ...opts,
+        query: query as RequestOptions['query'],
+      }),
+    shows: (opts) =>
+      showFeed(
+        (query, signal) => client.showsPage(query, signal ? { signal } : {}),
+        { now: http.now, sleep },
+        opts,
+      ),
+    answerShow: (id, result, opts) =>
+      request<ShowAnswer>('POST', showPath(id), {
+        body: { result },
+        ...keyed(opts?.idempotencyKey),
+      }),
+    followShows: (opts) =>
+      followShowsWith(
+        (follow) => client.shows(follow),
+        (id, result) => client.answerShow(id, result),
         opts,
       ),
     request,
