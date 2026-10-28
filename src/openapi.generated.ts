@@ -187,6 +187,7 @@ export type Card = {
     name: string
     title: string
     summary?: string
+    why?: string
     options?: {
       id: string
       label: string
@@ -198,6 +199,18 @@ export type Card = {
     }[]
     recommendedIds?: string[]
     rationale?: string
+    artifacts?: {
+      kind: "image" | "diff" | "url" | "file" | "draft" | "code" | (string & {})
+      title: string
+      ref: string
+      attachmentId?: string
+      /** image or file: true for an uploadUrl */
+      upload?: boolean
+      lines?: string[]
+      caption?: string
+      lang?: "ts" | "json" | "shell" | "sql" | "yaml" | "toml" | "css" | "markdown" | "text" | (string & {})
+      startLine?: number
+    }[]
     highStakes: boolean
     at: string
     answered?: {

@@ -125,6 +125,12 @@ if (sendTo?.kind === 'assistant' && no)
 "From now on" is the person's, in Pending You. A teammate's (`kind: 'teammate'`, "Send this to Doug?") is answered in
 Pending You too: send the person to `card.url`.
 
+A question an assistant put to the person on an open card is its `ask`, answered with its `askId`. Show its `summary`,
+then its `why` whole when there is one (what the assistant wrote beyond the summary, line breaks kept), and its
+`artifacts` as you show a card's: a draft is words it would send in the person's name, word for word. While a draft is
+on it, `actions` has no `answer` for your app, on the question or the card, and an answer to the question comes back
+as an `ApiError` with code `forbidden` (its `problem.reason` is `draft`): send the person to `card.url`.
+
 `pendingYou.snapshot()` reads the whole queue at once: each list's first cards (`pending`, `later`, `delegated`,
 `done`), their `counts`, and the `areas` and `groups` the cards are filed in. Read it on start and when the change feed
 says something changed; while nothing has, its ETag makes the read a 304.
