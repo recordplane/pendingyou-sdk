@@ -163,6 +163,7 @@ export type Card = {
   answer?: Answer
   undoUntil?: string
   snoozedUntil?: string
+  sendTo?: SendTo
   delegation?: {
     to: {
       assistantId: string
@@ -171,6 +172,7 @@ export type Card = {
     mode: "freely" | "loop" | (string & {})
     state: "working" | "suggested" | "answered" | "returned" | "taken_back" | (string & {})
     at: string
+    onStandingOk?: true
     pickedUpAt?: string
     returnAt?: string
     working?: {
@@ -303,6 +305,7 @@ export type Answer = {
   theyDecide?: boolean
   failedStep?: number
   handled?: "self" | "leave" | (string & {})
+  notSent?: true
   by?: "you" | "go-between" | "helper" | "teammate" | (string & {})
   helper?: {
     name: string
@@ -341,6 +344,21 @@ export type NewReply = {
   asked?: {
     text: string
     at: string
+  }
+}
+
+export type SendTo = {
+  name: string
+  kind: "assistant" | "teammate" | (string & {})
+  to?: {
+    assistantId: string
+    agentId: string
+  }
+  mode?: "freely" | "loop" | (string & {})
+  helped?: {
+    title: string
+    at: string
+    answered: boolean
   }
 }
 
@@ -892,6 +910,7 @@ export type AnswerRequest = {
   failedStep?: number
   askId?: string
   handled?: "self" | "leave"
+  notSent?: true
   holdSeconds?: number
 }
 

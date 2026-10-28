@@ -107,6 +107,24 @@ answer, kept if it has to send the answer again. High-stakes cards come back fro
 `high_stakes`: send the person to `card.url`. `answer` with `handled: 'self'` says the person will do it themselves
 (I'll handle it), and `handled: 'leave'` that they won't do a to-do (Skip).
 
+A card its assistant asked to send on carries `sendTo`. On one asking another of the person's assistants again ("Ask
+Maple again?", `kind: 'assistant'`), a hand-over to `sendTo.to` says yes this time, while it's there (the assistant is
+in your sign-in's reach), and `notSent` says no:
+
+```ts
+const { sendTo } = card
+if (sendTo?.kind === 'assistant' && yes && sendTo.to)
+  await pendingYou.cards.delegate(card.id, {
+    to: sendTo.to,
+    mode: sendTo.mode === 'freely' ? 'freely' : 'loop',
+  })
+if (sendTo?.kind === 'assistant' && no)
+  await pendingYou.cards.answer(card.id, { version: card.version, notSent: true })
+```
+
+"From now on" is the person's, in Pending You. A teammate's (`kind: 'teammate'`, "Send this to Doug?") is answered in
+Pending You too: send the person to `card.url`.
+
 `pendingYou.snapshot()` reads the whole queue at once: each list's first cards (`pending`, `later`, `delegated`,
 `done`), their `counts`, and the `areas` and `groups` the cards are filed in. Read it on start and when the change feed
 says something changed; while nothing has, its ETag makes the read a 304.
