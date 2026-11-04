@@ -27,6 +27,8 @@ import type {
   ChangesQuery,
   DelegateRequest,
   DelegateResponse,
+  FocusRequest,
+  FocusResponse,
   LaterRequest,
   LaterResponse,
   ListCardsQuery,
@@ -122,6 +124,11 @@ export interface Client {
   }
   /** The person is at this app now, or has left it (presence:desk). Every 30 seconds while they are. */
   presence(here: boolean): Promise<void>
+  /**
+   * Which pane the person is in now, and their last sign of activity there (presence:focus, Pending You's own apps
+   * only). Cards their assistant there also asks them wait while they stay; the answer names those held now.
+   */
+  focus(report: FocusRequest): Promise<FocusResponse>
   /** One page of the change feed (cards:read). */
   changesPage(query?: ChangesQuery, options?: { signal?: AbortSignal }): Promise<ChangeList>
   /** The change feed, followed (cards:read): see changes.ts. */
@@ -392,6 +399,7 @@ export function createClient(options: ClientOptions): Client {
     presence: async (here) => {
       await request<void>('POST', '/v1/presence', { body: { here } })
     },
+    focus: (report) => request<FocusResponse>('POST', '/v1/focus', { body: report }),
     changesPage: (query, opts) =>
       request<ChangeList>('GET', '/v1/changes', {
         ...opts,
