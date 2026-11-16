@@ -131,6 +131,21 @@ then its `why` whole when there is one (what the assistant wrote beyond the summ
 on it, `actions` has no `answer` for your app, on the question or the card, and an answer to the question comes back
 as an `ApiError` with code `forbidden` (its `problem.reason` is `draft`): send the person to `card.url`.
 
+A helper's to-do (since 0.7.0) is a question with `action` in place of options: something only the person can do, its
+steps as an action card's. Answer it with `done`, true or false ("I can't", with their words in `text`). Undo an answer
+to a question with its `askId` too:
+
+```ts
+const ask = card.ask
+if (ask?.action && !ask.answered && card.actions.includes('answer')) {
+  await pendingYou.cards.answer(card.id, { version: card.version, askId: ask.id, done: true })
+  // Within its 5 seconds:
+  await pendingYou.cards.undo(card.id, { askId: ask.id })
+}
+```
+
+A card its helper handed back and then picked up again itself says so in `delegation.resumes`.
+
 `pendingYou.snapshot()` reads the whole queue at once: each list's first cards (`pending`, `later`, `delegated`,
 `done`), their `counts`, and the `areas` and `groups` the cards are filed in. Read it on start and when the change feed
 says something changed; while nothing has, its ETag makes the read a 304.
