@@ -164,6 +164,12 @@ export type Card = {
   undoUntil?: string
   snoozedUntil?: string
   sendTo?: SendTo
+  drafted?: {
+    by: "claude-code" | "codex" | "opencode" | "pi" | (string & {})
+    model: string
+    confidence: number
+    said?: string
+  }
   delegation?: {
     to: {
       assistantId: string
@@ -337,6 +343,7 @@ export type Answer = {
   failedStep?: number
   handled?: "self" | "leave" | (string & {})
   notSent?: true
+  notNeeded?: true
   by?: "you" | "go-between" | "helper" | "teammate" | (string & {})
   helper?: {
     name: string
@@ -958,6 +965,7 @@ export type AnswerRequest = {
   askId?: string
   handled?: "self" | "leave"
   notSent?: true
+  notNeeded?: true
   holdSeconds?: number
 }
 
