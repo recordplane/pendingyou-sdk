@@ -17,7 +17,7 @@ export type Me = {
   }
   grant: {
     id: string
-    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "assistants:show" | "presence:desk" | "cards:high_stakes" | "cards:manage" | "account:manage" | "presence:focus" | (string & {}))[]
+    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "assistants:show" | "presence:desk" | "cards:high_stakes" | "cards:manage" | "notify:manage" | "account:manage" | "presence:focus" | (string & {}))[]
     reach: "machine" | "all" | (string & {})
     machine?: {
       id: string
@@ -693,6 +693,7 @@ export type Snapshot = {
   }
   areas: Area[]
   groups: AreaGroup[]
+  notify?: NotifySettings
 }
 
 export type Area = {
@@ -891,7 +892,7 @@ export type Problem = {
   type: string
   title: string
   status: number
-  code: "invalid" | "app_not_available" | "high_stakes" | "yes_required" | "area_change" | "not_your_answer" | "forbidden" | "no_machine" | "not_found" | "method_not_allowed" | "version_conflict" | "not_waiting" | "hold_over" | "delegated" | "conflict" | "already_answered" | "expired" | "idempotency_in_progress" | "idempotency_mismatch" | "rate_limited" | "server_error" | "not_available" | "client_outdated" | "unavailable" | (string & {})
+  code: "invalid" | "app_not_available" | "high_stakes" | "yes_required" | "area_change" | "not_your_answer" | "forbidden" | "no_machine" | "not_found" | "method_not_allowed" | "version_conflict" | "not_waiting" | "hold_over" | "delegated" | "conflict" | "already_answered" | "expired" | "idempotency_in_progress" | "idempotency_mismatch" | "rate_limited" | "server_error" | "not_available" | "client_outdated" | "push_not_set_up" | "unavailable" | (string & {})
   detail: string
   requestId?: string
   fields?: string[]
@@ -923,6 +924,45 @@ export type ClientConfig = {
   presentation: {
     v: number
   }
+}
+
+export type NotifySettings = {
+  mute?: {
+    choice: "1h" | "2h" | "tomorrow" | "forever" | (string & {})
+    until?: string
+  }
+  stillWhenStuck: boolean
+  showQuestion: boolean
+  newCards: "stuck" | "soon" | "all" | (string & {})
+  apns: {
+    ready: boolean
+  }
+}
+
+export type PushDevice = {
+  id: string
+  kind: "webpush" | "apns" | (string & {})
+  environment?: "sandbox" | "production" | (string & {})
+  addedAt: string
+  lastUsedAt?: string
+  off?: "removed" | "replaced" | "gone" | "signed_out" | (string & {})
+}
+
+export type PushDeviceResponse = {
+  device: PushDevice
+  ready: boolean
+  firstDevice: boolean
+}
+
+export type PushDeviceRemoved = {
+  id: string
+  removed: boolean
+}
+
+export type PushTestResponse = {
+  id: string
+  sent: boolean
+  gone: boolean
 }
 
 export type ListCardsQuery = {
@@ -1048,4 +1088,26 @@ export type FocusRequest = {
     server: string
   } | null
   activeAt: string
+}
+
+export type PushDeviceRequest = {
+  kind: "apns"
+  token: string
+  environment: "sandbox" | "production"
+  bundle: string
+  turnOn?: boolean
+}
+
+export type PushDeviceRemoveQuery = {
+  reason?: "removed" | "signed_out"
+}
+
+export type PushTestRequest = Record<string, never>
+
+export type PushSettingsRequest = {
+  mute?: ("1h" | "2h" | "tomorrow" | "forever") | null
+  timeZone?: string
+  stillWhenStuck?: boolean
+  showQuestion?: boolean
+  newCards?: "stuck" | "soon" | "all"
 }
