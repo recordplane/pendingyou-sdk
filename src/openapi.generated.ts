@@ -340,6 +340,7 @@ export type Answer = {
     audioSeconds?: number
   }
   theyDecide?: boolean
+  failed?: true
   failedStep?: number
   handled?: "self" | "leave" | (string & {})
   notSent?: true
@@ -1001,6 +1002,7 @@ export type AnswerRequest = {
       theyDecide?: boolean
     }
   }
+  failed?: true
   failedStep?: number
   done?: boolean
   askId?: string
