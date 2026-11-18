@@ -644,6 +644,7 @@ export type PresentationSteps = {
       label: Line
     }
     changedAfter?: Line
+    runs?: Run[]
   }[]
 }
 
