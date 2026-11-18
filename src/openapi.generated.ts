@@ -586,6 +586,7 @@ export type Presentation = {
     meta: Line[]
   }
   conversation?: Conversation
+  reply?: Reply
   fallback: {
     line: Line
     path: string
@@ -653,6 +654,14 @@ export type Conversation = {
   shown: number
   earlier?: Line
   newBefore?: string
+  fold?: {
+    head?: {
+      who?: Line
+      time?: Line
+    }
+    day?: Line
+    hidesNew?: true
+  }
   left?: number
   leftLine?: Line
   items: ConversationItem[]
@@ -670,6 +679,28 @@ export type ConversationItem = {
   words?: Line
   attachmentIds?: string[]
   via?: "voice" | "text" | (string & {})
+}
+
+export type Reply = {
+  head: Line
+  label: Line
+  time?: Line
+  quote: {
+    label: Line
+    words?: Line
+  }
+  messages: {
+    id: string
+    time?: Line
+    words?: Line
+  }[]
+  preview?: {
+    id: string
+    at: string
+    words: Line
+    time?: Line
+  }
+  replyTo?: Line
 }
 
 export type Line = {
