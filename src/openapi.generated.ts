@@ -966,6 +966,13 @@ export type PushTestResponse = {
   gone: boolean
 }
 
+export type PushNotificationWords = {
+  title: string
+  body: string
+  url: string
+  gone?: true
+}
+
 export type ListCardsQuery = {
   status?: "pending" | "snoozed" | "delegated" | "done"
   area?: string[]
@@ -1112,4 +1119,8 @@ export type PushSettingsRequest = {
   stillWhenStuck?: boolean
   showQuestion?: boolean
   newCards?: "stuck" | "soon" | "all"
+}
+
+export type PushNotificationQuery = {
+  reason: string
 }
