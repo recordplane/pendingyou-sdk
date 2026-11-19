@@ -685,6 +685,7 @@ export type ConversationItem = {
   words?: Line
   attachmentIds?: string[]
   via?: "voice" | "text" | (string & {})
+  label?: Line
 }
 
 export type ConversationLive = {
