@@ -665,6 +665,7 @@ export type Conversation = {
   }
   left?: number
   leftLine?: Line
+  live?: ConversationLive
   items: ConversationItem[]
 }
 
@@ -680,6 +681,29 @@ export type ConversationItem = {
   words?: Line
   attachmentIds?: string[]
   via?: "voice" | "text" | (string & {})
+}
+
+export type ConversationLive = {
+  original: {
+    open: boolean
+    show: Line
+    hide: Line
+    progress?: Line
+    chips?: {
+      ref: string
+      kind: string
+      line: Line
+    }[]
+  }
+  reAsk?: {
+    under: string
+    placeholder: Line
+  }
+  chose?: {
+    under: string
+    line: Line
+  }
+  openAt?: string
 }
 
 export type Reply = {
