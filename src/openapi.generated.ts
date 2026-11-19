@@ -42,6 +42,9 @@ export type Card = {
   title: string
   summary: string
   summaryRuns?: Run[]
+  textRuns?: {
+    [key: string]: Run[]
+  }
   urgency: "now" | "today" | "whenever" | (string & {})
   blocking: boolean
   fallback?: {
