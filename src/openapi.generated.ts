@@ -591,6 +591,7 @@ export type Presentation = {
   conversation?: Conversation
   reply?: Reply
   ask?: AskFace
+  sources?: EmailFace[]
   fallback: {
     line: Line
     path: string
@@ -748,6 +749,35 @@ export type AskFace = {
     runs?: Run[]
   }
   goesTo?: Line
+}
+
+export type EmailFace = {
+  kind: "email"
+  heading: Line
+  label: Line
+  subject: Line
+  from: {
+    name: Line
+    address?: Line
+    initial: string
+  }
+  to?: Line
+  date?: Line
+  body: Doc
+  fold: {
+    folded: boolean
+    show: Line
+  }
+  images?: {
+    hidden: number
+    line: Line
+  }
+  truncated?: Line
+  attachments?: {
+    name: Line
+    size?: Line
+    attachmentId?: string
+  }[]
 }
 
 export type Line = {
