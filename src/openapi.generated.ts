@@ -587,6 +587,7 @@ export type Presentation = {
   }
   conversation?: Conversation
   reply?: Reply
+  ask?: AskFace
   fallback: {
     line: Line
     path: string
@@ -701,6 +702,25 @@ export type Reply = {
     time?: Line
   }
   replyTo?: Line
+}
+
+export type AskFace = {
+  tag: Line
+  changed?: Line
+  context?: {
+    label: Line
+    title: Line
+  }
+  title: Line
+  summary: {
+    line: Line
+    runs?: Run[]
+  }
+  why?: {
+    line: Line
+    runs?: Run[]
+  }
+  goesTo?: Line
 }
 
 export type Line = {
