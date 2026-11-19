@@ -587,6 +587,15 @@ export type Presentation = {
   row: {
     title: Line
     meta: Line[]
+    turn?: Line
+    last?: {
+      who: Line
+      words: Line
+    }
+    area?: {
+      id: string
+      label: Line
+    }
   }
   conversation?: Conversation
   reply?: Reply
