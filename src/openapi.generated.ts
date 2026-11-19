@@ -731,6 +731,9 @@ export type Reply = {
     time?: Line
   }
   replyTo?: Line
+  earlier?: Line
+  earlierLabel: Line
+  earlierRegion: Line
 }
 
 export type AskFace = {
@@ -789,6 +792,7 @@ export type NewReplyRow = {
   time: Line
   preview: Line
   about: Line
+  name: Line
 }
 
 export type Line = {
@@ -843,6 +847,9 @@ export type Snapshot = {
   notify?: NotifySettings
   newReplies?: NewReplyRow[]
   newRepliesLine?: Line
+  newRepliesLabel?: Line
+  newRepliesRegion?: Line
+  newRepliesUnread?: Line
 }
 
 export type Area = {
