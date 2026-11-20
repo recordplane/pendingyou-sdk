@@ -703,6 +703,38 @@ export type Conversation = {
       question?: Line
       line?: "message" | "handed" | "handed_back" | "taken_back" | "back" | "reopened" | (string & {})
       messageId?: string
+      time?: Line
+      mark?: {
+        id: "answered" | "fallback" | "withdrawn" | "later" | "delegated" | "you" | "said" | "handed" | "back" | (string & {})
+        tone: "ok" | "quiet" | (string & {})
+      }
+      outcome?: Line
+      route?: {
+        first: {
+          name: string
+          who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | (string & {})
+        }
+        hidden: boolean
+        current: {
+          name: string
+          who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | (string & {})
+        }
+        label: Line
+        state?: Line
+        tone: "quiet" | "stalled" | "you" | (string & {})
+      }
+      note?: Line
+      withdrawn?: Line
+      state?: Line
+      talked?: Line
+      said?: Line
+      style?: "you" | "agent" | "event" | "note" | (string & {})
+      who?: Line
+      words?: {
+        line: Line
+        runs?: Run[]
+      }
+      doc?: Doc
     }[]
     more?: {
       count: number
