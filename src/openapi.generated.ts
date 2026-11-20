@@ -556,6 +556,11 @@ export type Presentation = {
     label: Line
     line: Line
   }
+  context?: {
+    why?: Line
+    didSoFar?: Line
+    tried?: Line
+  }
   route?: {
     first: {
       name: string
