@@ -313,6 +313,8 @@ export type Card = {
   }[]
   threadCount: number
   newReply?: NewReply
+  lane?: "new" | "motion" | "later" | "done" | (string & {})
+  section?: "yours" | "theirs" | (string & {})
   partial?: true
   presentation?: Presentation
   url: string
@@ -596,6 +598,8 @@ export type Presentation = {
       id: string
       label: Line
     }
+    lane?: "new" | "motion" | "later" | "done" | (string & {})
+    section?: "yours" | "theirs" | (string & {})
   }
   conversation?: Conversation
   reply?: Reply
@@ -853,10 +857,16 @@ export type CardList = {
 
 export type Snapshot = {
   stack?: string[]
+  lanes?: {
+    new: string[]
+    yours: string[]
+    theirs: string[]
+  }
   pending: Card[]
   later: Card[]
   delegated: Card[]
   done: Card[]
+  motion?: Card[]
   counts: {
     pending: number
     waiting: number
@@ -864,6 +874,12 @@ export type Snapshot = {
     delegated: number
     done: number
     elsewhere?: number
+    new?: number
+    yours?: number
+    theirs?: number
+    newThreads?: number
+    yoursThreads?: number
+    theirsThreads?: number
   }
   areas: Area[]
   groups: AreaGroup[]
