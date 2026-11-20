@@ -17,7 +17,7 @@ export type Me = {
   }
   grant: {
     id: string
-    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "assistants:show" | "presence:desk" | "cards:high_stakes" | "cards:manage" | "notify:manage" | "account:manage" | "presence:focus" | (string & {}))[]
+    scopes: ("cards:read" | "cards:read:all" | "cards:answer" | "cards:reply" | "cards:later" | "cards:delegate" | "assistants:read" | "assistants:show" | "presence:desk" | "cards:high_stakes" | "cards:manage" | "notify:manage" | "assistants:manage" | "account:manage" | "presence:focus" | (string & {}))[]
     reach: "machine" | "all" | (string & {})
     machine?: {
       id: string
@@ -147,6 +147,7 @@ export type Card = {
     agent?: {
       id: string
       name: string
+      shownName?: string
     }
     task: {
       label: string
@@ -1029,6 +1030,7 @@ export type Assistant = {
   agents: {
     id: string
     name: string
+    shownName?: string
     about?: string
     state: "live" | "recent" | "quiet" | (string & {})
     liveAt?: string
@@ -1050,6 +1052,12 @@ export type Assistant = {
       }
     }[]
   }[]
+}
+
+export type RenameAgentResponse = {
+  agentId: string
+  shownName?: string
+  changed: boolean
 }
 
 export type ShowList = {
@@ -1335,4 +1343,9 @@ export type PushSettingsRequest = {
 
 export type PushNotificationQuery = {
   reason: string
+}
+
+export type RenameAgentRequest = {
+  /** The name you see it called, 1 to 40 characters; null goes back to its own. */
+  name: string | null
 }
