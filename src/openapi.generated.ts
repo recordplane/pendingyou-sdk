@@ -679,6 +679,20 @@ export type Conversation = {
   left?: number
   leftLine?: Line
   live?: ConversationLive
+  before?: {
+    items: {
+      kind: "card" | "asked" | "line" | (string & {})
+      cardId: string
+      at: string
+      question?: Line
+      line?: "message" | "handed" | "handed_back" | "taken_back" | "back" | "reopened" | (string & {})
+      messageId?: string
+    }[]
+    more?: {
+      count: number
+      line: Line
+    }
+  }
   items: ConversationItem[]
 }
 
