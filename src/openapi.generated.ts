@@ -575,21 +575,26 @@ export type Presentation = {
     }
     label: Line
     state?: Line
+    spoken?: Line
     tone: "quiet" | "stalled" | "you" | (string & {})
     steps?: {
       at?: string
+      time?: Line
       line: Line
       detail?: Line
       quote?: string
+      quoted?: Line
       who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | "you" | (string & {})
       name?: string
       source?: "claude-code" | "codex" | "cursor" | "gemini-cli" | "opencode" | "pi" | "antigravity" | "grok" | "muse" | "chatgpt" | "claude" | "dots" | "other" | "webhook" | "teammate" | (string & {})
       when: "past" | "now" | "next" | (string & {})
       rounds?: {
         at?: string
+        time?: Line
         line: Line
         detail?: Line
         quote?: string
+        quoted?: Line
         who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | "you" | (string & {})
         name?: string
         source?: "claude-code" | "codex" | "cursor" | "gemini-cli" | "opencode" | "pi" | "antigravity" | "grok" | "muse" | "chatgpt" | "claude" | "dots" | "other" | "webhook" | "teammate" | (string & {})
@@ -721,6 +726,7 @@ export type Conversation = {
         }
         label: Line
         state?: Line
+        spoken?: Line
         tone: "quiet" | "stalled" | "you" | (string & {})
       }
       note?: Line
@@ -876,7 +882,7 @@ export type Line = {
 
 export type LineArg = string | number | {
   time: string
-  as: "clock" | "duration" | "ago" | "until" | "day" | "date" | "since" | (string & {})
+  as: "clock" | "duration" | "ago" | "until" | "day" | "date" | "since" | "stamp" | (string & {})
   zone?: string
 } | {
   key: string
