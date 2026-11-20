@@ -316,6 +316,7 @@ export type Card = {
   newReply?: NewReply
   lane?: "new" | "motion" | "later" | "done" | (string & {})
   section?: "yours" | "theirs" | (string & {})
+  unread?: true
   partial?: true
   presentation?: Presentation
   url: string
@@ -610,6 +611,7 @@ export type Presentation = {
     }
     lane?: "new" | "motion" | "later" | "done" | (string & {})
     section?: "yours" | "theirs" | (string & {})
+    unread?: true
   }
   conversation?: Conversation
   reply?: Reply
@@ -1264,7 +1266,10 @@ export type DelegateRequest = {
 
 export type TakeBackRequest = Record<string, never>
 
-export type SeenRequest = Record<string, never>
+export type SeenRequest = {
+  /** The newest thing on the card the screen drew: its newest message, or when it came or last changed. Absent: up to now. */
+  upTo?: string
+}
 
 export type HoldRequest = {
   /** From now: a minute ahead while the Undo is paused (asked again as it stays paused), or the time it has left once it resumes. */
