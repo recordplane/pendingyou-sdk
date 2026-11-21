@@ -622,6 +622,7 @@ export type Presentation = {
   reply?: Reply
   ask?: AskFace
   sources?: EmailFace[]
+  talk?: CardTalk
   fallback: {
     line: Line
     path: string
@@ -746,6 +747,7 @@ export type Conversation = {
       count: number
       line: Line
     }
+    next?: string
   }
   items: ConversationItem[]
 }
@@ -861,6 +863,33 @@ export type EmailFace = {
   }[]
 }
 
+export type CardTalk = {
+  label: Line
+  talked: Line
+  shown: number
+  left?: number
+  messages: {
+    id: string
+    from: "helper" | "asker" | "you" | "teammate" | (string & {})
+    at: string
+    who: Line
+    time: Line
+    words: {
+      line: Line
+      runs?: Run[]
+    }
+    stuck?: {
+      who: Line
+      found?: {
+        line: Line
+        runs?: Run[]
+      }
+      needs: Line
+      label: Line
+    }
+  }[]
+}
+
 export type NewReplyRow = {
   cardId: string
   areaId: string
@@ -968,6 +997,60 @@ export type AreaGroup = {
 
 export type CardResponse = {
   card: Card
+}
+
+export type ThreadPage = {
+  thread: {
+    id: string
+    items: ThreadItem[]
+    more?: {
+      count: number
+      line: Line
+    }
+    next?: string
+  }
+}
+
+export type ThreadItem = {
+  kind: "card" | "asked" | "line" | (string & {})
+  cardId: string
+  at: string
+  question?: Line
+  line?: "message" | "handed" | "handed_back" | "taken_back" | "back" | "reopened" | (string & {})
+  messageId?: string
+  time?: Line
+  mark?: {
+    id: "answered" | "fallback" | "withdrawn" | "later" | "delegated" | "you" | "said" | "handed" | "back" | (string & {})
+    tone: "ok" | "quiet" | (string & {})
+  }
+  outcome?: Line
+  route?: {
+    first: {
+      name: string
+      who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | (string & {})
+    }
+    hidden: boolean
+    current: {
+      name: string
+      who: "asker" | "webhook" | "person" | "helper" | "their_assistant" | (string & {})
+    }
+    label: Line
+    state?: Line
+    spoken?: Line
+    tone: "quiet" | "stalled" | "you" | (string & {})
+  }
+  note?: Line
+  withdrawn?: Line
+  state?: Line
+  talked?: Line
+  said?: Line
+  style?: "you" | "agent" | "event" | "note" | (string & {})
+  who?: Line
+  words?: {
+    line: Line
+    runs?: Run[]
+  }
+  doc?: Doc
 }
 
 export type AnswerResponse = {
@@ -1240,6 +1323,11 @@ export type ListCardsQuery = {
   limit?: number
   whole?: number
   after?: string
+}
+
+export type ThreadQuery = {
+  after: string
+  limit?: number
 }
 
 export type AnswerRequest = {
